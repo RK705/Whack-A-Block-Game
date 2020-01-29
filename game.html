@@ -1,0 +1,194 @@
+<html>
+<head>
+	<style>
+	body{
+		background:url("https://images.unsplash.com/photo-1568057217189-dc40161931b4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60");
+		background-repeat: no-repeat;
+		background-size: cover;
+		height:100%;
+	}
+	.game {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+
+table {
+  
+ 
+  
+  margin-bottom: 2rem;
+
+  position: relative;
+}
+
+td {
+  height: 150px;
+  width: 200px;
+  border: 2px solid #200f21;
+  border-radius: 30%;
+  text-align: center;
+  
+}
+.point-board {
+  display: flex;
+  font-family: 'Quicksand', sans-serif;
+  justify-content: flex-start;
+  position: relative;
+  font-size: 38px;
+  padding: 5px 5px;
+  color: black;
+  width: 85vw;
+  overflow: visible;
+}
+button {
+	font-size:30px;
+	padding:10px;
+	color: grey;
+	border-radius:20%;
+	margin-left:150px;
+	margin-bottom:50px;
+	margin-right:150px;
+	flex-direction:row;
+	
+
+}
+.title{
+	font-size:40px;
+	font-family: 'Quicksand', sans-serif;
+	color: black;
+	text-align:center;
+}
+
+	</style>
+</head>
+<body>
+    
+
+  
+    <h1 class="title"  id="title-name">Whack-A-Block-Game</h1>
+    <div class="game">
+      <div >
+        <a href="#board"><button type="button" name="button"  id="start">Start</button></a>
+        <a href="#title-name"><button type="button" name="button"  id="stop">Stop</button></a>
+      </div>
+
+      <div class="points-board">
+
+      </div>
+
+      <table id="board">
+        <tr>
+          <td id="1" onmousedown="checkEvent(1)"></td>
+          <td id="2" onmousedown="checkEvent(2)"></td>
+          <td id="3" onmousedown="checkEvent(3)"></td>
+        </tr>
+        <tr>
+          <td id="4" onmousedown="checkEvent(4)"></td>
+          <td id="5" onmousedown="checkEvent(5)"></td>
+          <td id="6" onmousedown="checkEvent(6)"></td>
+        </tr>
+        <tr>
+          <td id="7" onmousedown="checkEvent(7)"></td>
+          <td id="8" onmousedown="checkEvent(8)"></td>
+          <td id="9" onmousedown="checkEvent(9)"></td>
+        </tr>
+      </table>
+    </div>
+ 
+
+
+
+	<script>
+	var startButton = document.getElementById('start')
+var stopButton = document.getElementById('stop')
+var td = document.getElementsByTagName('td')
+var pointsBoardParent = document.getElementsByClassName('points-board')[0]
+var i, prevRandNumber, randomColor, clear = 0, randomNumber = 0, point = 0;
+
+var colorArray1 = ['#2b34cf', '#57cf23', '#f5372a', '#1d8ec2', '#d2db25', '#db8325', '#2b34cf', '#13ba5e', '#575757']
+var colorArray = ['purple', 'blue', 'grey',  'orange', 'crimson', 'yellow', 'green', 'black', 'violet']
+
+function clearBoard() {
+  for (i = 0; i < td.length; i++) {
+    td[i].style.backgroundColor = "white"
+  }
+}
+
+function getRandomNumber(prevRandNumber) {
+  var number = Math.floor((Math.random() * 10))
+
+  if (number == 0) {
+    if (prevRandNumber != 1) {
+      number = 1
+    }
+    else {
+      number = 2
+    }
+  }
+
+  else if (number == prevRandNumber) {
+    if ((number + 1) > 9) {
+      number -= 1
+    }
+    else {
+      number += 1
+    }
+  }
+
+  return number
+}
+
+function checkEvent(id) {
+  if (td[id - 1].style.backgroundColor != "white") {
+    point += 1;
+
+    var editPointsBoard = pointsBoardParent.children[0]
+    editPointsBoard.innerText = ("POINTS : " + point);
+  }
+}
+
+function createPointsBoard() {
+  var pointsBoard = document.createElement('span')
+
+  pointsBoard.className = "point-board"
+  pointsBoard.innerText = ("POINTS : " + point);
+  pointsBoardParent.appendChild(pointsBoard)
+}
+
+function startGame() {
+  if (clear == 0) {
+    if (pointsBoardParent.children.length == 0) {
+      createPointsBoard()
+    }
+    
+    clear = setInterval(function() {
+      prevRandNumber = randomNumber
+      randomNumber = getRandomNumber(prevRandNumber)
+      randomColor = colorArray[randomNumber - 1]
+      clearBoard()
+
+      var getBlock = document.getElementById(randomNumber)
+      getBlock.style.backgroundColor = randomColor;
+
+    }, 700)
+  }
+}
+
+function stopGame() {
+  clearInterval(clear)
+  clearBoard()
+
+  clear = 0;
+}
+
+startButton.addEventListener('click', startGame)
+stopButton.addEventListener('click', stopGame)
+
+
+	</script>
+</body>
+</html>
